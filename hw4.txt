@@ -1,0 +1,33 @@
+#!/usr/bin/perl -l
+
+##### hw4-1.pl#######
+## MARCUS BARNES ##
+
+my $line;
+my $catfirstline;
+my $everyline="";
+$count=0;
+
+foreach $line ( <STDIN> ) {
+        $numoflines = $.;					#keeping the number of lines in a variable numoflines
+        $everyline= $everyline . $line;				#concatenating every line of stdin to one large string with 
+        $count++;						#\n chars still in the everyline string
+        @array[$count] = $line;					#creating an array with each line in
+#       print "Array # $count : ", @array[$count];
+         }
+open (OFILE, ">output_colorized.asciiimg");			#opening outputfile for writing
+#        print "Num of lines: ", $numoflines;
+print "\n$everyline\n";
+        @splitarray[$count] = split(/\n/,@array);
+#print "Split array: \n", @splitarray;
+print "Array:\n", @array;
+if ($everyline =~ m/(a\/\\_\/\\)/) {                                            #nested conditional statement
+        print OFILE "\033[0;37m $`", "\033[0;36m", $&;                          #couldn't get to doing the color properly
+                if ($everyline =~ m/(a\\\^x\^\/)/) {
+                                print OFILE "\033[0;37m $`", "\033[0;36m", $&;
+                 if ($everyline =~ m/(a\/m m\\)/){
+                                print OFILE "\033[0;37m $`", "\033[0;36m", $&;
+                                #print "$everyline";
+                }}}
+print OFILE "$everyline";
+close(OFILE)

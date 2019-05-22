@@ -1,0 +1,153 @@
+#!/bin/bash
+#Marcus Barnes
+
+mkdir ~tfiles/
+let myvar=5
+let numOfFilesUniq=0
+declare -A assoc
+declare -A numOfHash
+#######################################################
+############ FUNCTION 1 ###############################
+############ find_and_count_duplicates ################
+#######################################################
+find_and_count_duplicates(){
+        #this finds all files in the current dir, and puts their name and
+        #md5sum into file.txt
+        find . -type f | xargs md5sum  > ~tfiles/files.txt
+
+        #while loop to go through the files.txt
+        while IFS=\  read -p "index  value: " index value
+                do
+                        assoc[$index]+=" $value"
+
+                        #if-then tests to see if the md5sum index if not then numOfHash=1
+                        #else if md5sum already exists numOfHash +=1
+                if [[ ${assoc[$index]} ]]
+                        then #echo "Md5sum exists"
+                        numOfHash[$index]=$(( numOfHash[$index] + 1 ))
+
+                        else
+                        numOfHash[$index]=1
+                fi
+
+                #end of if-then
+        done < ~tfiles/files.txt
+
+        numOfFilesUniq=${#assoc[@]}
+        #echo "the key at value 1 = ${assoc[$2]}"
+        #-----END of while loop also inserting files.txt as
+        ##-----where to read from
+        rm ~files/files.txt
+        rmdir ~files
+}
+#################################################
+##END OF FUNCTION ##find_and_count_duplicates
+#################################################
+
+find_and_count_duplicates #calls funtion #1
+
+
+
+
+
+################################################
+########### FUNCTION 2 #########################
+################################################
+#declaring my arrays/ variables
+
+declare -A myGroupSize
+list_groups(){
+        #take value from numOfHash and store into regular keys array
+        #take key from numOfHash and store into regular $values array
+
+        count=1
+        for i in ${numOfHash[@]};                                       #takes each value of numOfHash
+                do
+                        keys[count]="$i"                                                     #stores numOfHash value into keys variable
+                        count=$(( count +1 ))
+        done
+
+
+        #take key from numOfHash and store into regular $values array
+        count=0
+        for i in ${!numOfHash[@]};                              #takes each key of numOfHash
+                do
+                        count=$(( count +1 ))
+                        values[count]="$i"                                           #stores numOfHash keys into values variable
+        done
+
+
+        count=1
+        for i in ${keys[@]}                                                     #loop to look at each value of keys array
+                do
+                        #turning value of the myGroupSize to a string concatenation of
+                        #all the md5sums with that many copies
+                        myGroupSize[$i]+=" ${values[count]}"
+                        count=$(( count +1 ))                                        
+        done
+}
+        list_groups
+############################################################################
+############################################################################
+############### /END OF FUNCTION 2##########################################
+############################################################################
+############################################################################
+
+
+
+
+################################################
+########### FUNCTION 3 #########################
+################################################
+print_group_sizes(){
+for i in ${!myGroupSize[@]}
+        do
+                echo $'\n'
+                tempvar="${myGroupSize[$i]}"
+                printf "There are $i copies of each of the following md5sum(s):"
+                echo $"\n"
+                printf " ${myGroupSize[$i]}";
+                echo $'\n'
+        done
+        let n=0
+}
+print_group_sizes
+############################################################################
+############################################################################
+############### /END OF FUNCTION 3##########################################
+############################################################################
+############################################################################
+
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+WHITE='\033[0;37m'
+BLUE='\033[0;34m'
+
+##BONUS1##
+
+for i in ${!myGroupSize[@]}
+        do
+                tempvar="${myGroupSize[$i]}"
+                printf "${BLUE}There are $i copies of each of the following md5sum(s): ${myGroupSize[$i]}";
+                printf $"\n"
+        done
+        let n=0
+
+##BONUS2##
+
+for i in $(dirs)
+                do
+                        printf "${RED}Directories: $i"
+                        printf $'\n'
+                done
+printf $'\n'
+
+for i in $(find . -type f)
+        do
+                printf "${WHITE}Files: $i"
+                printf $'\n'
+        done
+
+
+#bonus3
+#This assignment ran slower than homework2

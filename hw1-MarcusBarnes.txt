@@ -1,0 +1,76 @@
+We had multiple sign up lists at a business convention named f1 f2 f3 etc with their name and email separated by a tab character.
+we have to reward a prize to a random person that signed up on the list.
+
+Here are the lists:
+mbarnes@linprog7.cs.fsu.edu:~/unix/hw1> head f1 f2 f3
+==> f1 <==
+adam piolet     apiolet@my.fsu.edu
+hannah brown    hbrown@my.fsu.edu
+issabel green   igreen@my.fsu.edu
+juan sanchez    jsanchez@my.fsu.edu
+
+==> f2 <==
+mark zukerberg  mzukerberg@my.fsu.edu
+matt ross       mross@my.fsu.edu
+michael scott   mscott@my.fsu.edu
+
+==> f3 <==
+michael scott   mscott@my.fsu.edu
+rachel targus   rtargus@my.fsu.edu
+ryan smith      rsmith@my.fsu.edu
+tyler durdan    tdurdan@my.fsu.edu
+
+
+--------------------------------------------------5 pipe ------------------------------------------------
+mbarnes@linprog7.cs.fsu.edu:~/unix/hw1> cat f* | sort | uniq | head | tee sortedlist
+adam piolet     apiolet@my.fsu.edu
+hannah brown    hbrown@my.fsu.edu
+issabel green   igreen@my.fsu.edu
+juan sanchez    jsanchez@my.fsu.edu
+mark zukerberg  mzukerberg@my.fsu.edu
+matt ross       mross@my.fsu.edu
+michael scott   mscott@my.fsu.edu
+rachel targus   rtargus@my.fsu.edu
+ryan smith      rsmith@my.fsu.edu
+tyler durdan    tdurdan@my.fsu.edu
+
+
+
+------------------------------------------3 pipe------------------------------------------------------------------
+mbarnes@linprog7.cs.fsu.edu:~/unix/hw1> nl -s ' ' -w 1 sortedlist | tr '\t' '\n' | less > newsorted
+mbarnes@linprog7.cs.fsu.edu:~/unix/hw1> cat newsorted
+1 adam piolet
+apiolet@my.fsu.edu
+2 hannah brown
+hbrown@my.fsu.edu
+3 issabel green
+igreen@my.fsu.edu
+4 juan sanchez
+jsanchez@my.fsu.edu
+5 mark zukerberg
+mzukerberg@my.fsu.edu
+6 matt ross
+mross@my.fsu.edu
+7 micheal scot
+mscott@my.fsu.edu
+8 micheal scott
+mscott@my.fsu.edu
+9 rachel targus
+rtargus@my.fsu.edu
+10 ryan smith
+rsmith@my.fsu.edu
+
+
+-------------------------------------------------4 pipe---------------------------------------------
+top one is winner! we have the top 3 in case first doesnt:
+
+mbarnes@linprog7.cs.fsu.edu:~/unix/hw1> expand sortedlist | shuf | head -n 3 | fmt -t
+issabel green   igreen@my.fsu.edu
+hannah brown    hbrown@my.fsu.edu
+matt ross       mross@my.fsu.edu
+
+second run:
+mbarnes@linprog7.cs.fsu.edu:~/unix/hw1> expand sortedlist | shuf | head -n 3 | fmt -t
+mark zukerberg  mzukerberg@my.fsu.edu
+adam piolet     apiolet@my.fsu.edu
+tyler durdan    tdurdan@my.fsu.edu
